@@ -64,6 +64,61 @@ namespace dl_mgr {
         return m_map[file.path().extension()] / file.path().filename();
         }
 
+    path_t& extension_map::operator[](const std::string &key)
+        {
+        return at(key);
+        }
+
+    path_t& extension_map::operator[](std::string &key)
+        {
+        return at(key);
+        }
+
+    extension_map::iterator extension_map::begin()
+        {
+        return m_map.begin();
+        }
+
+    extension_map::iterator extension_map::end()
+        {
+        return m_map.end();
+        }
+
+    extension_map::const_iterator extension_map::begin() const
+        {
+        return m_map.cbegin();
+        }
+
+    extension_map::const_iterator extension_map::end() const
+        {
+        return m_map.cend();
+        }
+
+
+    program::program(std::ostream *log_ostream) : log(log_ostream) 
+        {
+        read_config_file(config_file, m_config);
+        }
+
+    void program::set_src_dir(const std::string &path)
+        {
+        //TODO: support config files in custom location
+        m_config.SourceDir = path;
+        write_config_file(config_file, m_config);
+        }
+
+    void program::edit_ext_entry(const std::string &ext, const std::string &dest)
+        {
+        m_config.Map[ext] = dest;
+        write_config_file(config_file, m_config);
+        }
+
+    void program::run(const std::string &path)
+        {
+        for (auto &p : dir_it(path.empty() ? m_config.SourceDir : path))
+            if (is_regular_file(p)) rename(p, m_config.Map.resolve_tgt(p));
+        }
+
     /**
      * \brief Reads a configuration file and stores it in
      *  the given configuration object.
@@ -73,7 +128,7 @@ namespace dl_mgr {
      */
     void read_config_file(const char *path, config_t &cfg)
         {
-        std::ifstream stream(path, std::ios::binary);
+        std::ifstream stream(path);
         stream >> cfg;
         stream.close();
         }
@@ -87,7 +142,7 @@ namespace dl_mgr {
      */
     void write_config_file(const char *path, const config_t &in_cfg)
         {
-        std::ofstream stream(path, std::ios::binary);
+        std::ofstream stream(path);
         stream << in_cfg;
         stream.close();
         }

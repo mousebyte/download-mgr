@@ -18,12 +18,21 @@
     <ClInclude Include="include\download-mgr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\stream.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\io.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\download-mgr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\io.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
